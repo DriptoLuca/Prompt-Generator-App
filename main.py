@@ -135,7 +135,8 @@ def main(page: ft.Page):
 
     def on_copia(e):
         if txt_output.value:
-            page.set_clipboard(txt_output.value)
+            # Metodo corretto per Flet 0.22+
+            page.clipboard.set(txt_output.value)
             txt_status.value = "✓ Prompt copiato negli appunti!"
             txt_status.color = "blue"
             page.update()
