@@ -18,23 +18,28 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Installa Flet (Nessun requirements.txt necessario)
+    - name: Installa Flet
       run: |
         python -m pip install --upgrade pip
         pip install flet
 
-    - name: Configura Java (Obbligatorio per Android)
+    - name: Configura Java
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Genera l'APK (Flet gestirà Flutter in autonomia)
+    - name: Configura Android SDK ed accetta licenze
+      run: |
+        mkdir -p "$ANDROID_HOME/licenses"
+        echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+        echo -e "\n84831b9409646a918e30573bab4c9c91346d8a7d" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+    - name: Genera l'APK
       run: flet build apk
 
-    - name: Rendi disponibile l'APK per il download
+    - name: Rendi disponibile l'APK
       uses: actions/upload-artifact@v4
       with:
         name: Generatore-Prompt-APK
-        # Questa sintassi cattura l'APK a prescindere dal nome esatto generato
         path: build/apk/**/*.apk
