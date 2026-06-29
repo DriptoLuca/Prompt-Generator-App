@@ -101,17 +101,15 @@ def genera_prompt(nome="", ruolo="", compito="", istruzioni="", contesto="", tip
 
     return "\n".join(sezioni).strip() + "\n"
 
-# --- INTERFACCIA GRAFICA MOBILE CON FLET ---
 def main(page: ft.Page):
     page.title = APP_NAME
-    page.theme_mode = "light" 
-    page.scroll = "adaptive"  
+    page.theme_mode = "light"
+    page.scroll = "adaptive"
     page.padding = 20
 
     agenti_disponibili = ["Gemini", "ChatGPT", "Grok", "Claude", "Perplexity"]
     tipi_disponibili = list(TIPI_OUTPUT.keys())
 
-    # Input Widgets
     dd_tipo = ft.Dropdown(label="Tipo di output", options=[ft.dropdown.Option(t) for t in tipi_disponibili], value="Testo", expand=True)
     sw_expander = ft.Switch(label="AI Expander (Espansione Semantica)", value=True)
     dd_agente = ft.Dropdown(label="Nome dell'agente", options=[ft.dropdown.Option(a) for a in agenti_disponibili], value=agenti_disponibili[0])
@@ -124,16 +122,11 @@ def main(page: ft.Page):
     txt_output = ft.TextField(label="Prompt Generato", multiline=True, min_lines=8, read_only=True, border_color="blue")
     txt_status = ft.Text(value="Pronto.", color="grey", weight="bold")
 
-    # Azioni
     def on_genera(e):
         prompt = genera_prompt(
-            nome=dd_agente.value,
-            ruolo=txt_ruolo.value,
-            compito=txt_compito.value,
-            istruzioni=txt_istruzioni.value,
-            contesto=txt_contesto.value,
-            tipo=dd_tipo.value,
-            usa_expander=sw_expander.value
+            nome=dd_agente.value, ruolo=txt_ruolo.value, compito=txt_compito.value,
+            istruzioni=txt_istruzioni.value, contesto=txt_contesto.value,
+            tipo=dd_tipo.value, usa_expander=sw_expander.value
         )
         txt_output.value = prompt
         txt_status.value = "✓ Prompt generato con successo!"
@@ -160,10 +153,9 @@ def main(page: ft.Page):
         page.update()
 
     btn_genera = ft.FilledButton("Genera", icon="auto_awesome", on_click=on_genera, expand=True)
-    btn_copia = ft.OutlinedButton("Copia", icon="copy", on_click=on_copia, expand=True)
-    btn_pulisci = ft.TextButton("Svuota", icon="delete", on_click=on_pulisci)
+    btn_copia = ft.OutlinedButton("Copia Prompt", icon="copy", on_click=on_copia, expand=True)
+    btn_pulisci = ft.OutlinedButton("Svuota Campi", icon="delete", on_click=on_pulisci, expand=True)
 
-    # Layout finale
     page.add(
         ft.Text(APP_NAME, size=24, weight="bold", color="blue"),
         ft.Divider(),
@@ -174,13 +166,12 @@ def main(page: ft.Page):
         txt_compito,
         txt_istruzioni,
         txt_contesto,
-        ft.Row([btn_genera, btn_copia], alignment="spaceBetween"),
-        btn_pulisci,
-        txt_status,
+        btn_genera,
         ft.Divider(),
-        txt_output
+        txt_status,
+        txt_output,
+        ft.Row([btn_copia, btn_pulisci], alignment="spaceBetween")
     )
 
 if __name__ == "__main__":
-    # Aggiornato per Flet 0.80.0 e successivi
     ft.run(main)
