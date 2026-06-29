@@ -13,30 +13,28 @@ jobs:
     - name: Scarica il codice del repository
       uses: actions/checkout@v4
 
-    - name: Configura Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-
-    - name: Installa Flet
-      run: |
-        python -m pip install --upgrade pip
-        pip install flet
-
     - name: Configura Java
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Configura Android SDK ed accetta licenze
-      run: |
-        mkdir -p "$ANDROID_HOME/licenses"
-        echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-        echo -e "\n84831b9409646a918e30573bab4c9c91346d8a7d" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+    - name: Configura Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: '3.24.0' # Versione stabile garantita
 
-    - name: Genera l'APK
-      run: flet build apk
+    - name: Configura Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Installa Flet e dipendenze
+      run: |
+        pip install flet
+        # Il comando build scarica automaticamente le dipendenze mancanti
+        flet build apk --verbose
 
     - name: Rendi disponibile l'APK
       uses: actions/upload-artifact@v4
