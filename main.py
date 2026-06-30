@@ -119,7 +119,8 @@ def main(page: ft.Page):
     txt_istruzioni = ft.TextField(label="Istruzioni specifiche", multiline=True, min_lines=2, max_lines=4)
     txt_contesto = ft.TextField(label="Contesto aggiuntivo", multiline=True, min_lines=2, max_lines=4)
     
-    txt_output = ft.TextField(label="Prompt Generato", multiline=True, min_lines=8, read_only=True, border_color="blue")
+    # selectable=True aggiunto per compatibilità clipboard Android 16
+    txt_output = ft.TextField(label="Prompt Generato", multiline=True, min_lines=8, read_only=True, selectable=True, border_color="blue")
     txt_status = ft.Text(value="Pronto.", color="grey", weight="bold")
 
     def on_genera(e):
@@ -135,7 +136,6 @@ def main(page: ft.Page):
 
     def on_copia(e):
         if txt_output.value:
-            # Metodo corretto per Flet 0.22+
             page.clipboard.set(txt_output.value)
             txt_status.value = "✓ Prompt copiato negli appunti!"
             txt_status.color = "blue"
