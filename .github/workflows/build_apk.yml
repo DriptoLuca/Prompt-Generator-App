@@ -26,9 +26,8 @@ jobs:
 
       - name: Accetta licenze Android
         run: |
-          mkdir -p "$ANDROID_HOME/licenses"
-          echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-          echo -e "\n84831b9409646a918e30573bab4c9c91346d8a7d" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+          yes | flutter doctor --android-licenses || true
+          flutter doctor --android-sdk
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -38,7 +37,6 @@ jobs:
       - name: Build APK
         run: |
           pip install flet
-          # Il comando corretto e minimale per le nuove versioni
           flet build apk --yes
 
       - name: Upload APK
