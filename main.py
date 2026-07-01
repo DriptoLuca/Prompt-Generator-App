@@ -1,4 +1,8 @@
 import flet as ft
+import os
+
+# Forza il rendering software per evitare il crash su GPU nuove/Xiaomi
+os.environ["FLET_RENDERER"] = "html" 
 
 def main(page: ft.Page):
     page.title = "Generatore Prompt AI"
