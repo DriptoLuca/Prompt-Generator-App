@@ -9,32 +9,39 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Scarica il codice del repository
+      - name: Checkout del codice
         uses: actions/checkout@v4
 
-      - name: Configura Java
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Configura Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.24.0'
+          flutter-version: '3.22.0'
 
-      - name: Configura Python
+      - name: Accetta licenze Android
+        run: |
+          mkdir -p "$ANDROID_HOME/licenses"
+          echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+          echo -e "\n84831b9409646a918e30573bab4c9c91346d8a7d" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Installa Flet e compila APK
+      - name: Build APK
         run: |
           pip install flet
-          flet build apk --yes
+          # Usiamo --module-name main se il file si chiama main.py
+          flet build apk --target android --release --yes
 
-      - name: Rendi disponibile l'APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Generatore-Prompt-APK
