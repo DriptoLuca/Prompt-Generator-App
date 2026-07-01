@@ -23,16 +23,19 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.22.0'
-          
-     - name: Accetta licenze Android
+
+      - name: Accetta licenze Android
         run: |
-          # Installazione forzata dei componenti necessari
           yes | sdkmanager --licenses > /dev/null || true
-          
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Build APK
         run: |
           pip install flet
-          # Proviamo a compilare accettando le licenze durante il build
           flet build apk --yes
 
       - name: Upload APK
