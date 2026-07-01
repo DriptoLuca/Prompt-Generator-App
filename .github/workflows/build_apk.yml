@@ -38,8 +38,8 @@ jobs:
       - name: Build APK
         run: |
           pip install flet
-          # Usiamo --module-name main se il file si chiama main.py
-          flet build apk --target android --release --yes
+          # Il comando corretto e minimale per le nuove versioni
+          flet build apk --yes
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
