@@ -23,23 +23,16 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.22.0'
-
-      - name: Accetta licenze Android
+          
+     - name: Accetta licenze Android
         run: |
-          # Metodo manuale per forzare l'accettazione delle licenze
-          mkdir -p $ANDROID_HOME/licenses
-          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > $ANDROID_HOME/licenses/android-sdk-license
-          echo "84831b9409646a918e30573bab4c9c91346d8a7d" > $ANDROID_HOME/licenses/android-sdk-preview-license
-          echo "d56f5187473751e9e1a877a88090190762957386" >> $ANDROID_HOME/licenses/android-sdk-license
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
+          # Installazione forzata dei componenti necessari
+          yes | sdkmanager --licenses > /dev/null || true
+          
       - name: Build APK
         run: |
           pip install flet
+          # Proviamo a compilare accettando le licenze durante il build
           flet build apk --yes
 
       - name: Upload APK
